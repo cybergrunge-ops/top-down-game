@@ -1,0 +1,162 @@
+<style> body{background:#222;font-family:mono;line-height:1;image-rendering: optimizeSpeed; image-rendering: -moz-crisp-edges; image-rendering: -o-crisp-edges; image-rendering: -webkit-optimize-contrast; image-rendering: pixelated; image-rendering: optimize-contrast;  -ms-interpolation-mode: nearest-neighbor;}
+.area{display:inline-block;position:relative;border:#00f 8px ridge;width:320px;height:320px;background:#111;}
+
+.dialogbox{position:absolute;bottom:0px;left:0px;padding:0px;right:0px;background:#eee;color:#111;font-weight:bold;font-size:22px;word-break: break-all;
+text-align:left;height:64px;overflow:hidden;visibility:visible;}
+
+button{width:80%;font-family:mono;border:4px outset gray;background:#161;color:#0ee;margin-top:15px;cursor:pointer}
+button:hover{background:#063;color:#f80}
+button:active{background:#055;color:#e80;border-style:inset}
+</style>
+<img rel="preload" src='https://cgru.net/archive/sprites/front.gif' style="visibility:hidden;display:none;">
+<img rel="preload" src='https://cgru.net/archive/sprites/back.gif' style="visibility:hidden;display:none;">
+<img rel="preload" src='https://cgru.net/archive/sprites/left.gif' style="visibility:hidden;display:none;">
+<img rel="preload" src='https://cgru.net/archive/sprites/right.gif' style="visibility:hidden;display:none;">
+<img rel="preload" src='https://cgru.net/archive/sprites/frontwalk.gif' style="visibility:hidden;display:none;">
+<img rel="preload" src='https://cgru.net/archive/sprites/backwalk.gif' style="visibility:hidden;display:none;">
+<img rel="preload" src='https://cgru.net/archive/sprites/leftwalk.gif' style="visibility:hidden;display:none;">
+<img rel="preload" src='https://cgru.net/archive/sprites/rightwalk.gif' style="visibility:hidden;display:none;">
+<body onkeydown="action(event)" ><center>
+
+<br>
+<span style="background:#d0f;line-height:1.3">.cybergrunge.net online video gaming system.</span>
+<br><br>
+<div style="margin:auto;">
+
+<div class="area" style="width:144;text-align:center;">
+<div style="position:absolute;height:100%;width:100%;">
+   <div style="color:#fa0;text-align:left;margin:4px;">
+STATUS:
+<br><span style="color:#d21">
+<BR>
+ONLINE: <div style="display:inline-block;positioN:Absolute;right:3px;">NO</div>
+<br>CONDTN: <div style="display:inline-block;positioN:Absolute;right:3px;">NORMAL</div>
+<br>LOC: <div style="display:inline-block;positioN:Absolute;right:3px;">HOME</div>
+<br>
+<br>PARTY: <div style="display:inline-block;positioN:Absolute;right:3px;">0/??</div>
+<br>HEALTH:<div style="display:inline-block;positioN:Absolute;right:3px;">0/??</div>
+<br>WORLD: <div style="display:inline-block;positioN:Absolute;right:3px;">0/??</div>
+<br>LEVEL:<div style="display:inline-block;positioN:Absolute;right:3px;">0/??</div>
+<br>
+<br>BOREDOM:<div style="display:inline-block;positioN:Absolute;right:3px;">50%</div>
+<br>
+<br>CRASHES:<div style="display:inline-block;positioN:Absolute;right:3px;">0</div>
+<br>ERRORS:<div style="display:inline-block;positioN:Absolute;right:3px;">0%</div>
+<br>DEBUG:<div style="display:inline-block;positioN:Absolute;text-align:left;left:0px;" id="debug"></div>
+<SPAN></div>
+</div>
+</div>
+
+<div class="area" id="mainarea" style="cursor:crosshair">
+
+<div style="position:absolute" id='character'><img id='charimg' rel="preload" src='https://cgru.net/archive/sprites/front.gif' style="position:absolute;width:32px;left:126px;top:126;"></div>
+
+   <div class="dialogbox">
+   test1 testing, and then another line. how many lines should there be? probably 4 at the very most, right?
+   </div>
+</div>
+
+<div class="area" style="width:144;text-align:center;">
+<div style="position:absolute;height:100%;width:100%;">
+<button>FULL MENU</button><br>
+<button>ACTION 1</button><br>
+<button>ACTION 2</button><br>
+<button>CONTINUE</button><br>
+</div>
+</div>
+</div>
+</div>
+
+
+<script>
+/* collision bools for later */ _CCL = true; _CCR = true; _CCU = true; _CCD = true;
+
+
+
+f = document.getElementById('mainarea');
+charimg = document.getElementById("charimg");
+/* map */ 				f.style.backgroundImage = 'url("https://cgru.net/michi.png")';
+/* start position*/		f.style.backgroundPosition='0px 0px';
+/* map size */ 			f.style.backgroundSize='1600px 1600px';
+
+var animtime = 15; 	// anim speed
+var pos=0;			// old
+var movei = 31;		// movement rate
+var oldbgp='';		// debug, old bg position
+var moved=0;		// old
+var animdone=true;	// old
+var id = null;		// old
+var xpos, ypos;		// old
+
+function quickmath(num,div){if(num % div == 0 || num==0){return " O.K.";}else{return " BAD";}}
+function getxypos(){fa = f.style.backgroundPosition.replace("px",""); fs = fa.split(" ");
+	xpos = parseInt(fs[0].replace("px","")); ypos = parseInt(fs[1].replace("px",""));}
+
+// movements 1px 
+function moveright1px(){f.style.backgroundPosition = parseInt(f.style.backgroundPosition)-1+ "px " + ypos+"px";}
+function moveleft1px(){f.style.backgroundPosition = parseInt(f.style.backgroundPosition)+1+ "px " + ypos+"px";}
+function movedown1px(){getxypos(); f.style.backgroundPosition = xpos + "px " + parseInt(ypos-1) +"px";}
+function moveup1px(){getxypos(); f.style.backgroundPosition = xpos + "px " + parseInt(ypos+1) +"px";}
+
+// debug
+function printdebug(){document.getElementById('debug').innerHTML = "<br>pos:<br>"+pos+"<BR>bgp:<BR>"+f.style.backgroundPosition+"<BR><BR>old bgp:<BR>"+ oldbgp+"<br>ypos:<br>"+ypos+" "+quickmath(ypos,16);}
+
+
+
+function leftpic1(){charimg.src="https://cgru.net/archive/sprites/left.gif";}
+function leftpic2(){charimg.src="https://cgru.net/archive/sprites/leftwalk.gif";}
+function rightpic1(){charimg.src="https://cgru.net/archive/sprites/right.gif";}
+function rightpic2(){charimg.src="https://cgru.net/archive/sprites/rightwalk.gif";}
+function uppic1(){charimg.src="https://cgru.net/archive/sprites/back.gif";}
+function uppic2(){charimg.src="https://cgru.net/archive/sprites/backwalk.gif";}
+function downpic1(){charimg.src="https://cgru.net/archive/sprites/front.gif";}
+function downpic2(){charimg.src="https://cgru.net/archive/sprites/frontwalk.gif";}
+
+//direction functions
+
+// LEFT ACTION
+	function leftaction(event){ oldbgp = fdbg; if(pos!=0){}else{
+		balls = setInterval(function(){ 
+		moveleft1px(); pos++; //other stuff here
+		if(pos>movei){clearInterval(balls); if(event.keyCode!="37"||event.keyCode!="65"){leftpic1();}else{leftpic2();} animdone=true; pos=0;} },animtime); } printdebug(); }
+// RIGHT ACTION
+	function rightaction(event){ oldbgp = fdbg; if(pos!=0){}else{
+		balls = setInterval(function(){ 
+		moveright1px(); pos++; //other stuff here
+		if(pos>movei){clearInterval(balls); if(event.keyCode!="39"||event.keyCode!="68"){rightpic1();}else{rightpic2();} animdone=true; pos=0;} },animtime); } printdebug(); }
+// UP ACTION
+	function upaction(event){ oldbgp = fdbg;	if(pos!=0){}else{
+		balls = setInterval(function(){ 
+		moveup1px(); pos++; //other stuff here
+		if(pos>movei){clearInterval(balls); if(event.keyCode!="38"||event.keyCode!="87"){uppic1();}else{uppic2();} animdone=true; pos=0;} },animtime); } printdebug(); }
+// DOWN ACTION
+	function downaction(event){ oldbgp = fdbg; if(pos!=0){}else{
+		balls = setInterval(function(){ 
+		movedown1px(); pos++; //other stuff here
+		if(pos>movei){clearInterval(balls); if(event.keyCode!="40"||event.keyCode!="83"){downpic1();}else{downpic2();} animdone=true; pos=0;} },animtime); } printdebug(); }
+
+
+
+// event
+
+function action(event){
+	fdbg = f.style.backgroundPosition;
+	getxypos();
+// spacebar forces check debug for now
+if(event.keyCode=="32"){printdebug();}
+else if(animdone==true&&_CCL==1&&event.keyCode=="37"||event.keyCode=="65"){ leftaction(event);}
+else if(animdone==true&&_CCR==1&&event.keyCode=="39"||event.keyCode=="68"){ rightaction(event);}	
+else if(animdone==true&&_CCU==1&&event.keyCode=="38"||event.keyCode=="87"){ upaction(event);}
+else if(animdone==true&&_CCD==1&&event.keyCode=="40"||event.keyCode=="83"){ downaction(event);}
+
+}
+</script>
+
+
+
+
+
+
+
+
+
